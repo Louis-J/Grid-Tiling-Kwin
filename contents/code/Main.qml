@@ -57,10 +57,20 @@ Item {
       });
     }
 
+    if (config.borderActive) {
+      connectSave(workspace, 'clientActivated', client => {
+        const activity = manager.getActivity(client);
+        if (activity)
+          activity.render(client.activityId);
+      });
+    }
+
     shortcut.init();
   }
 
   Component.onDestruction: {
+    if (config.borderActive)
+      disconnectRemove(workspace, 'clientActivated');
     for (const method of ['clientMinimized', 'clientUnminimized'])
       disconnectRemove(workspace, method);
     disconnectRemove(workspace, 'clientAdded');
